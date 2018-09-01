@@ -18,7 +18,7 @@ proxy:
 
   config_fp: /etc/orthanc/orthanc.json
   extra_modalities:
-    - name: mock
+    - name: pacs
       aet:  MOCK
       host: 192.168.1.115
       port: 2424
