@@ -19,9 +19,9 @@ proxy:
   config_fp: /etc/orthanc/orthanc.json
   extra_modalities:
     - name: mock
-    - aet:  MOCK
-    - host: 192.168.1.115
-    - port: 2424
+      aet:  MOCK
+      host: 192.168.1.115
+      port: 2424
 
 index:
   host: dev.central-imaging.com
