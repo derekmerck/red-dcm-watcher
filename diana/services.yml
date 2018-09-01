@@ -1,7 +1,7 @@
 ---
 proxy:
 
-  host: 172.17.0.1
+  host: 172.21.0.1
   port: 8999
   user: diana
   password: passw0rd!

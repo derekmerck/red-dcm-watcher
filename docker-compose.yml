@@ -5,6 +5,9 @@
 # resin docker-compose is 2.1 max
 version: '2.1'
 
+volumes:
+  data:
+
 services:
 
   dicom:
@@ -16,11 +19,13 @@ services:
     environment:
       # Don not use Resin's init system on a non-Resin base
       INITSYSTEM: "on"
+    volumes:
+      - data:/etc/orthanc
 
   diana:
     build: diana
     privileged: true
     environment:
       INITSYSTEM: "on"
-    volumes_from:
-      - dicom
+    volumes:
+      - data:/etc/orthanc
