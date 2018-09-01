@@ -1,4 +1,4 @@
-reDIANA Mock-PACS
+reDIANA DICOM-Watcher
 ==========================
 
 Derek Merck  
@@ -6,7 +6,7 @@ Derek Merck
 Rhode Island Hospital and Brown University  
 Providence, RI  
 
-Mock-pacs testing service using Orthanc and DIANA, packaged with docker-compose for Resin.io arm32v7 devices.
+DICOM watch and report service using Orthanc and DIANA, packaged with docker-compose for Resin.io arm32v7 devices.
 
 
 Use It

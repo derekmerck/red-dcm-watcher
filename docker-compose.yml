@@ -10,8 +10,8 @@ services:
   dicom:
     build: orthanc
     ports:
-      - "2424:4242"
-      - "2408:8042"
+      - "8999:8042"
+      - "8998:4242"
     privileged: true
     environment:
       # Don not use Resin's init system on a non-Resin base
