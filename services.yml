@@ -1,0 +1,13 @@
+---
+pacs:
+  ctype: ObservableProxiedDicom
+  proxy_desc:
+    ctype: Orthanc
+    host: proxy
+    password: ${ORTHANC_PASSWORD}
+  proxy_domain: pacs
+
+splunk:
+  ctype: Splunk
+  host: ${SPLUNK_HOST}
+  hec_token: ${SPLUNK_HEC_TOKEN}

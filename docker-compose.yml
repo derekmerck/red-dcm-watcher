@@ -1,31 +1,42 @@
-# Remote Embedded Diana Mock PACS
-# For use w Resin.io
+# Remote Embedded Diana Watcher
+# For use w balena.io
 # Merck, Summer 2018
 
 # resin docker-compose is 2.1 max
 version: '2.1'
 
-volumes:
-  data:
 
 services:
 
-  dicom:
-    build: orthanc
+  proxy:
+    image: derekmerck/orthanc-confd:arm32v7-latest
     ports:
-      - "8999:8042"
-      - "8998:4242"
+      - "4242:4242"
     privileged: true
     environment:
-      # Don not use Resin's init system on a non-Resin base
+      # Do not use Resin's init system on a non-Resin base
       INITSYSTEM: "on"
-    volumes:
-      - data:/etc/orthanc
+      ORTHANC_MAX_SIZE: 500
+      ORTHANC_MAX_PATIENTS: 50
+      ORTHANC_AET: DIANA
+      ORTHANC_REMOTE_ENABLED: false
+      # Include these in device environment vars
+      # ORTHANC_PASSWORD: ${ORTHANC_PASSWORD}
+      # ORTHANC_MOD_0: ${LOCAL_PACS_ADDR}
+    # Use a tmpfs to avoid writing passwords to disk
+    tmpfs:
+      - /etc/orthanc
 
   diana:
-    build: diana
+    image: derekmerck/diana2:arm32v7-latest
+    volumes:
+      - "./services.yml:/services.yml:ro"
     privileged: true
+#    command: diana-cli watch -r index_studies pacs splunk
     environment:
       INITSYSTEM: "on"
-    volumes:
-      - data:/etc/orthanc
+      DIANA_SERVICES_PATH: /services.yml
+      # Include these in device environment vars
+      # ORTHANC_PASSWORD: ${ORTHANC_PASSWORD}
+      # SPLUNK_HOST:      ${SPLUNK_HOST}
+      # SPLUNK_HEC_TOKEN: ${SPLUNK_HEC_TOKEN}

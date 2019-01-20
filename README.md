@@ -1,4 +1,4 @@
-reDIANA DICOM-Watcher
+Remote Embedded DIANA Watcher
 ==========================
 
 Derek Merck  
@@ -6,7 +6,7 @@ Derek Merck
 Rhode Island Hospital and Brown University  
 Providence, RI  
 
-DICOM watch and report service using Orthanc and DIANA, packaged with docker-compose for Resin.io arm32v7 devices.
+DICOM watch and report service using Orthanc and DIANA, packaged with docker-compose for belena.io arm32v7 devices.
 
 
 Use It
@@ -22,58 +22,33 @@ Configuration
 
 Configuration is handled through the services definitions, which can be passed as a file or as an environment variable to the DIANA service.
 
-```yaml
----
+For a default reporting service that triggers every 5 minutes and reports all studies, set device environment variables for the following:
 
-# Setup the Orthanc proxy that will be querying the PACS
-proxy:
-
-  # Host name should match service name in docker-compose
-  host: dicom
-  # Port is the internal port number, not the exposed port number (8999)
-  port: 8042
-  # Set to the new user added in "extra_users"
-  user: diana
-  password: xxxxxx
-  # What the monitored service calls the watcher
-  domains:
-    pacs: DIANA
-
-  # Should be a domain in the domains dict
-  query_domain: pacs
-  query_level: DicomLevel.STUDIES
-  query_dict:
-    'ModalitiesInStudy': ""
-    'StudyDescription': ""
-  # Look back over last 5 mins
-  query_discovery_period: 300
-  # Check for new every 2 mins (and ignore repreats)
-  polling_interval: 120
-
-  # Shared configuration dir from docker-compose
-  config_fp: /etc/orthanc/orthanc.json
-  # Extra modalities and users to add to the proxy service
-  # Need to enter this data for the PACS to be monitored
-  # Can monitor more than one PACS service using multiple routes
-  extra_modalities:
-    - name: pacs
-      aet:  MOCK
-      host: 192.168.1.115
-      port: 2424
-  # Overwriting the 'diana' user gets rid of the default password
-  extra_users:
-    - name: diana
-      password: xxxxxx
-
-# Setup the Splunk indexer
-index:
-  host: dev.central-imaging.com
-  hec_port: 8088
-  default_index: remotes
-  default_token: remotes_tok
-  hec_tokens:
-    remotes_tok: "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
+```bash
+ORTHANC_PASSWORD=<password>
+LOCAL_PACS_ADDR="pacs,<aet>,<addr>,<port>"
+SPLUNK_HOST=<splunk host name>
+SPLUNK_HEC_TOKEN=<registered hec token>
 ```
+
+To run more complex queries, modify the `services.yml` file "pacs" key.  For example, the following service description would run every 10 minutes and return the accession number and patient id for any new non-con head CT's (with a matching description) from the prior 30 minutes.  See the DIANA ObservableProxiedDicom api for parameters.
+
+```yaml
+pacs:
+  ctype: ObservableProxiedDicom
+  proxy_desc:
+    ctype: Orthanc
+    host: proxy
+    password: ${ORTHANC_PASSWORD}
+  proxy_domain: pacs
+  polling_interval: 600
+  qperiod: 1800
+  query: 
+    "StudyDescription": "CT HEAD WO CONTRAST"
+    "AccessionNumber": ""
+    "PatientID": ""
+```
+
 
 License
 -------
