@@ -9,7 +9,7 @@ version: '2.1'
 services:
 
   proxy:
-    image: derekmerck/orthanc-confd:arm32v7-latest
+    image: derekmerck/orthanc-confd:latest-arm32v7
     ports:
       - "4242:4242"
     privileged: true

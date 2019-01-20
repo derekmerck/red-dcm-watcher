@@ -1,2 +1,2 @@
-FROM derekmerck/diana2:arm32v7-latest
+FROM derekmerck/diana2:latest-arm32v7
 COPY ./services.yml /services.yml
