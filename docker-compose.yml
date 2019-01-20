@@ -28,9 +28,7 @@ services:
       - /etc/orthanc
 
   diana:
-    image: derekmerck/diana2:arm32v7-latest
-    volumes:
-      - "./services.yml:/services.yml:ro"
+    build: diana
     privileged: true
 #    command: diana-cli watch -r index_studies pacs splunk
     environment:
