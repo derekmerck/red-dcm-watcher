@@ -49,6 +49,12 @@ pacs:
     "PatientID": ""
 ```
 
+Testing
+--------
+
+To connect directly to the Orthanc proxy (or any other DIANA service), add it in the DIANA_SERVICE variable:
+
+`export DIANA_SERVICES='{"orthanc": {"ctype": "Orthanc","password": "${ORTHANC_PASSWORD}","host": "proxy"}}'`
 
 License
 -------

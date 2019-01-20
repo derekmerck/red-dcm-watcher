@@ -19,8 +19,9 @@ services:
       ORTHANC_MAX_SIZE: 500
       ORTHANC_MAX_PATIENTS: 50
       ORTHANC_AET: DIANA
-      ORTHANC_REMOTE_ENABLED: false
-      # Include these in device environment vars
+      # Need to allow remotes, but won't publish http port outside docker network
+      # ORTHANC_REMOTE_ENABLED: false
+      # Include these as device environment vars
       # ORTHANC_PASSWORD: ${ORTHANC_PASSWORD}
       # ORTHANC_MOD_0: ${LOCAL_PACS_ADDR}
     # Use a tmpfs to avoid writing passwords to disk
@@ -30,11 +31,12 @@ services:
   diana:
     build: diana
     privileged: true
+    # Uncomment this to run the service
 #    command: diana-cli watch -r index_studies pacs splunk
     environment:
       INITSYSTEM: "on"
       DIANA_SERVICES_PATH: /services.yml
-      # Include these in device environment vars
+      # Include these as device environment vars
       # ORTHANC_PASSWORD: ${ORTHANC_PASSWORD}
       # SPLUNK_HOST:      ${SPLUNK_HOST}
       # SPLUNK_HEC_TOKEN: ${SPLUNK_HEC_TOKEN}
