@@ -19,8 +19,9 @@ services:
       ORTHANC_MAX_SIZE: 500
       ORTHANC_MAX_PATIENTS: 50
       ORTHANC_AET: DIANA
-      # Need to allow remotes, but won't publish http port outside docker network
-      # ORTHANC_REMOTE_ENABLED: false
+      # Need to allow remotes for other containers,
+      # but won't accept http from outside docker network
+      # ORTHANC_REMOTE_ENABLED: true
       # Include these as device environment vars
       # ORTHANC_PASSWORD: ${ORTHANC_PASSWORD}
       # ORTHANC_MOD_0: ${LOCAL_PACS_ADDR}
@@ -30,9 +31,10 @@ services:
 
   diana:
     build: diana
+    # bind mounts not allowed, so add services with COPY
     privileged: true
-    # Uncomment this to run the service
 #    command: diana-cli watch -r index_studies pacs splunk
+#    command: diana-cli watch -r say_studies pacs -
     environment:
       INITSYSTEM: "on"
       DIANA_SERVICES_PATH: /services.yml
